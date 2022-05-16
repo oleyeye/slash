@@ -8,34 +8,6 @@ options = {
     baidu: { name: "baidu", id: "slash.baidu", title: "🍰 Baidu", sites: ["https://*.baidu.com/s?wd=*"], searchPath: "https://www.baidu.com/s?wd={0}" }
 }
 
-
-for (const [key, value] of Object.entries(options)) {
-    let documentUrlPatterns = [];
-    if (key === "google") {
-        documentUrlPatterns = [...options.bing.sites, ...options.baidu.sites]
-    }
-
-    if (key === "bing") {
-        documentUrlPatterns = [...options.google.sites, ...options.baidu.sites]
-    }
-
-    if (key === "baidu") {
-        documentUrlPatterns = [...options.google.sites, ...options.bing.sites]
-    }
-
-    chrome.contextMenus.create({
-        type: "normal",
-        id: value.id,
-        title: value.title,
-        contexts: ["page"],
-        documentUrlPatterns: documentUrlPatterns
-    })
-}
-
-chrome.contextMenus.onClicked.addListener(
-    onContextMenuClick
-)
-
 function onContextMenuClick(info, tab) {
     const keywords = getSearchKeyWords(tab.url);
     menuId = info.menuItemId;
@@ -49,6 +21,16 @@ function onContextMenuClick(info, tab) {
         console.log("update succeed")
     },
     )
+}
+
+function getDocumentUrlPattern(name){
+    let patterns = [];
+    for(const [key, value] of Object.entries(options)){
+        if (key !== name){
+            patterns = patterns.concat(value.sites);
+        }
+    }
+    return patterns;
 }
 
 function getSearchKeyWords(urlstr) {
@@ -85,3 +67,20 @@ function format() {
     }
     return str
 }
+
+
+/* Main */
+for (const [key, value] of Object.entries(options)) {
+    let documentUrlPatterns = getDocumentUrlPattern(key);
+    chrome.contextMenus.create({
+        type: "normal",
+        id: value.id,
+        title: value.title,
+        contexts: ["page"],
+        documentUrlPatterns: documentUrlPatterns
+    })
+}
+
+chrome.contextMenus.onClicked.addListener(
+    onContextMenuClick
+)
