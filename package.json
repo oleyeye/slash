@@ -1,0 +1,50 @@
+{
+  "name": "slash",
+  "version": "1.0.0",
+  "description": "Chrome extension for switching search results between different search engines",
+  "main": "index.js",
+  "chromeExtension": {
+    "background": {
+      "service_worker": {
+        "name": "background",
+        "page": false
+      }
+    },
+    "options_page": {
+      "name": "options",
+      "page": true
+    }
+  },
+  "scripts": {
+    "start": "node scripts/build.js",
+    "build": "webpack build --mode=production --progress",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oleyeye/slash.git"
+  },
+  "keywords": [
+    "chrome",
+    "extension",
+    "search",
+    "switch"
+  ],
+  "author": "qiang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oleyeye/slash/issues"
+  },
+  "homepage": "https://github.com/oleyeye/slash#readme",
+  "devDependencies": {
+    "@babel/core": "^7.18.0",
+    "@babel/preset-env": "^7.18.0",
+    "babel-loader": "^8.2.5",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.6.0",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2"
+  }
+}
