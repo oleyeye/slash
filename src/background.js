@@ -1,4 +1,4 @@
-options = {
+const options = {
     google: {
         name: "google", id: "slash.google", title: "🥧 Google",
         sites: ["https://*.google.com/search?q=*", "https://*.google.com.hk/search?q=*", "https://*.google.com.au/search?q=*", "https://*.google.com.jp/search?q=*"],
@@ -23,10 +23,10 @@ function onContextMenuClick(info, tab) {
     )
 }
 
-function getDocumentUrlPattern(name){
+function getDocumentUrlPattern(name) {
     let patterns = [];
-    for(const [key, value] of Object.entries(options)){
-        if (key !== name){
+    for (const [key, value] of Object.entries(options)) {
+        if (key !== name) {
             patterns = patterns.concat(value.sites);
         }
     }
@@ -68,19 +68,34 @@ function format() {
     return str
 }
 
-
-/* Main */
-for (const [key, value] of Object.entries(options)) {
-    let documentUrlPatterns = getDocumentUrlPattern(key);
-    chrome.contextMenus.create({
-        type: "normal",
-        id: value.id,
-        title: value.title,
-        contexts: ["page"],
-        documentUrlPatterns: documentUrlPatterns
-    })
+function getOptions(callback) {
+    chrome.storage.sync.get("options", ({ options }) => {
+        callback(options);
+    });
 }
 
-chrome.contextMenus.onClicked.addListener(
-    onContextMenuClick
-)
+
+/* Main */
+chrome.runtime.onInstalled.addListener(() => {
+    chrome.storage.sync.set({ options });
+    getOptions((options) => {
+        for (const [key, value] of Object.entries(options)) {
+            let documentUrlPatterns = getDocumentUrlPattern(key);
+            chrome.contextMenus.create({
+                type: "normal",
+                id: value.id,
+                title: value.title,
+                contexts: ["page"],
+                documentUrlPatterns: documentUrlPatterns
+            }, () => {
+                if (chrome.runtime.lastError) {
+                    console.error(chrome.runtime.lastError);
+                }
+            })
+        }
+
+        chrome.contextMenus.onClicked.addListener(
+            onContextMenuClick
+        );
+    })
+});

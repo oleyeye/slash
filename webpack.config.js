@@ -56,12 +56,12 @@ const copyIgnoreFileName = getIgnoreHtmlFileNames(entryConfigs);
 module.exports = {
     mode: "production",
     entry: entry,
+    devtool: "cheap-module-source-map",
     output: {
         clean: true,
         path: path.resolve(__dirname, './dist'),
         filename: '[name].js',
     },
-
     module: {
         rules: [
             {
@@ -73,7 +73,7 @@ module.exports = {
                             "targets": {
                                 "chrome": "58",
                             }
-                        }]],
+                        }], ['@babel/preset-react', { "runtime": "automatic" }]],
                     }
                 },
                 exclude: /(node_modules|bower_components)/
@@ -86,7 +86,6 @@ module.exports = {
                         loader: 'css-loader',
                         options: {
                             importLoaders: 1,
-                            minimize: true,
                             sourceMap: true,
                         }
                     },
