@@ -61,6 +61,7 @@ module.exports = {
         clean: true,
         path: path.resolve(__dirname, './dist'),
         filename: '[name].js',
+        assetModuleFilename: 'images/[name][ext][query]'
     },
     module: {
         rules: [
@@ -90,6 +91,10 @@ module.exports = {
                         }
                     },
                 ],
+            },
+            {
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                type: 'asset/resource',
             },
         ],
     },

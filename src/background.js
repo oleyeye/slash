@@ -1,17 +1,17 @@
-const options = {
-    google: {
+const options = [
+    {
         name: "google", id: "slash.google", title: "🥧 Google",
         sites: ["https://*.google.com/search?q=*", "https://*.google.com.hk/search?q=*", "https://*.google.com.au/search?q=*", "https://*.google.com.jp/search?q=*"],
         searchPath: "https://www.google.com/search?q={0}"
     },
-    bing: { name: "bing", id: "slash.bing", title: "🍨 Bing", sites: ["https://*.bing.com/search?q=*"], searchPath: "https://cn.bing.com/search?q={0}" },
-    baidu: { name: "baidu", id: "slash.baidu", title: "🍰 Baidu", sites: ["https://*.baidu.com/s?wd=*"], searchPath: "https://www.baidu.com/s?wd={0}" }
-}
+    { name: "bing", id: "slash.bing", title: "🍨 Bing", sites: ["https://*.bing.com/search?q=*"], searchPath: "https://cn.bing.com/search?q={0}" },
+    { name: "baidu", id: "slash.baidu", title: "🍰 Baidu", sites: ["https://*.baidu.com/s?wd=*"], searchPath: "https://www.baidu.com/s?wd={0}" }
+]
 
 function onContextMenuClick(info, tab) {
     const keywords = getSearchKeyWords(tab.url);
     menuId = info.menuItemId;
-    option = Object.values(options).find(e => e.id === menuId);
+    option = options.find(e => e.id === menuId);
     if (!option) {
         throw new Error("No option defined")
     }
@@ -25,9 +25,9 @@ function onContextMenuClick(info, tab) {
 
 function getDocumentUrlPattern(name) {
     let patterns = [];
-    for (const [key, value] of Object.entries(options)) {
-        if (key !== name) {
-            patterns = patterns.concat(value.sites);
+    for (const option of options) {
+        if (option.name !== name) {
+            patterns = patterns.concat(option.sites);
         }
     }
     return patterns;
@@ -79,12 +79,12 @@ function getOptions(callback) {
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({ options });
     getOptions((options) => {
-        for (const [key, value] of Object.entries(options)) {
-            let documentUrlPatterns = getDocumentUrlPattern(key);
+        for (const option of options) {
+            let documentUrlPatterns = getDocumentUrlPattern(option.name);
             chrome.contextMenus.create({
                 type: "normal",
-                id: value.id,
-                title: value.title,
+                id: option.id,
+                title: option.title,
                 contexts: ["page"],
                 documentUrlPatterns: documentUrlPatterns
             }, () => {

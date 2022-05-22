@@ -9,7 +9,7 @@ export default function App() {
 
     useEffect(() => {
         chrome.storage.sync.get("options", ({ options }) => {
-            setRows(Object.values(options));
+            setRows(options);
         });
     }, [])
 
