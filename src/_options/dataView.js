@@ -40,7 +40,7 @@ export default function DataView(props) {
                             <TableCell align="left">{row.sites.map(item => (<div key={item}>{item}</div>))}</TableCell>
                             <TableCell align="left">{row.searchPath}</TableCell>
                             <TableCell align="right">
-                                <IconButton aria-label="delete" color="primary">
+                                <IconButton aria-label="delete" color="primary" onClick={() => props.onDelete(row.id)}>
                                     <DeleteForeverIcon />
                                 </IconButton>
                             </TableCell>
