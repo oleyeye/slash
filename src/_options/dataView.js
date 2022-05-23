@@ -19,10 +19,10 @@ export default function DataView(props) {
                 <TableHead>
                     <TableRow>
                         <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
-                        <TableCell sx={{ fontWeight: "bold" }} align="left">Id</TableCell>
+                        {/* <TableCell sx={{ fontWeight: "bold" }} align="left">Id</TableCell> */}
                         <TableCell sx={{ fontWeight: "bold" }} align="left">Title</TableCell>
                         <TableCell sx={{ fontWeight: "bold" }} align="left">Sites</TableCell>
-                        <TableCell sx={{ fontWeight: "bold" }} align="left">SearchPath</TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }} align="left">Search Path</TableCell>
                         <TableCell sx={{ fontWeight: "bold" }} align="right">Action</TableCell>
                     </TableRow>
                 </TableHead>
@@ -35,7 +35,7 @@ export default function DataView(props) {
                             <TableCell component="th" scope="row">
                                 {row.name}
                             </TableCell>
-                            <TableCell align="left">{row.id}</TableCell>
+                            {/* <TableCell align="left">{row.id}</TableCell> */}
                             <TableCell align="left">{row.title}</TableCell>
                             <TableCell align="left">{row.sites.map(item => (<div key={item}>{item}</div>))}</TableCell>
                             <TableCell align="left">{row.searchPath}</TableCell>

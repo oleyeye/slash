@@ -19,8 +19,32 @@ function onContextMenuClick(info, tab) {
     const navigateTo = getNavigateTo(option, keywords);
     chrome.tabs.update(tab.id, { url: navigateTo }, () => {
         console.log("update succeed")
-    },
-    )
+    });
+}
+
+function onOptionsChanged(changes, area) {
+    if (area === 'sync' && Object.keys(changes).includes("options")) {
+        chrome.contextMenus.removeAll(() => {
+            createContextMenus(changes.options.newValue);
+        });
+    }
+}
+
+function createContextMenus(options) {
+    for (const option of options) {
+        let documentUrlPatterns = getDocumentUrlPattern(option.name);
+        chrome.contextMenus.create({
+            type: "normal",
+            id: option.id,
+            title: option.title,
+            contexts: ["page"],
+            documentUrlPatterns: documentUrlPatterns
+        }, () => {
+            if (chrome.runtime.lastError) {
+                console.error(chrome.runtime.lastError.message);
+            }
+        })
+    }
 }
 
 function getDocumentUrlPattern(name) {
@@ -79,23 +103,14 @@ function getOptions(callback) {
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({ options });
     getOptions((options) => {
-        for (const option of options) {
-            let documentUrlPatterns = getDocumentUrlPattern(option.name);
-            chrome.contextMenus.create({
-                type: "normal",
-                id: option.id,
-                title: option.title,
-                contexts: ["page"],
-                documentUrlPatterns: documentUrlPatterns
-            }, () => {
-                if (chrome.runtime.lastError) {
-                    console.error(chrome.runtime.lastError);
-                }
-            })
-        }
+        createContextMenus(options);
 
         chrome.contextMenus.onClicked.addListener(
             onContextMenuClick
+        );
+
+        chrome.storage.onChanged.addListener(
+            onOptionsChanged
         );
     })
 });
