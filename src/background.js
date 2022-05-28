@@ -104,13 +104,13 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({ options });
     getOptions((options) => {
         createContextMenus(options);
-
-        chrome.contextMenus.onClicked.addListener(
-            onContextMenuClick
-        );
-
-        chrome.storage.onChanged.addListener(
-            onOptionsChanged
-        );
     })
 });
+
+chrome.contextMenus.onClicked.addListener(
+    onContextMenuClick
+);
+
+chrome.storage.onChanged.addListener(
+    onOptionsChanged
+);
