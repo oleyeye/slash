@@ -1,6 +1,7 @@
 {
     "name": "Slash",
     "description": "Switch search result between google, bing, baidu search engine",
+    "short description": "Menu to switch between different search engines",
     "version": "1.0",
     "manifest_version": 3,
     "background": {
