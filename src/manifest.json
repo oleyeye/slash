@@ -11,14 +11,6 @@
         "activeTab",
         "contextMenus"
     ],
-    "action": {
-        "default_icon": {
-            "16": "/images/lightning16.png",
-            "32": "/images/lightning32.png",
-            "48": "/images/lightning48.png",
-            "128": "/images/lightning128.png"
-        }
-    },
     "icons": {
         "16": "/images/lightning16.png",
         "32": "/images/lightning32.png",
